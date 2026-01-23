@@ -1,22 +1,52 @@
-# Email Best Practices Agent Skill
+```
+ _____ __  __    _    ___ _       ____  _____ ____ _____   ____  ____      _    ____ _____ ___ ____ _____ ____
+| ____|  \/  |  / \  |_ _| |     | __ )| ____/ ___|_   _| |  _ \|  _ \    / \  / ___|_   _|_ _/ ___| ____/ ___|
+|  _| | |\/| | / _ \  | || |     |  _ \|  _| \___ \ | |   | |_) | |_) |  / _ \| |     | |  | | |   |  _| \___ \
+| |___| |  | |/ ___ \ | || |___  | |_) | |___ ___) || |   |  __/|  _ <  / ___ \ |___  | |  | | |___| |___ ___) |
+|_____|_|  |_/_/   \_\___|_____| |____/|_____|____/ |_|   |_|   |_| \_\/_/   \_\____| |_| |___\____|_____|____/
+```
 
-An agent skill covering email deliverability, compliance, and implementation best practices.
+# Email Best Practices Skill
+
+A comprehensive agent skill for building production-ready email systems. Covers everything from DNS authentication to webhook processing, with a focus on deliverability, compliance, and reliability.
+
+## What This Skill Covers
+
+**Getting Started**
+- Planning which emails your app needs (password reset, verification, order confirmations)
+- Setting up email authentication (SPF, DKIM, DMARC) so emails reach inboxes
+
+**Sending Emails**
+- Transactional email design (subject lines, content structure, mobile-first)
+- Marketing email best practices (consent, segmentation, unsubscribe)
+- Compliance requirements by region (CAN-SPAM, GDPR, CASL)
+
+**Production Infrastructure**
+- Idempotency and retry logic to prevent duplicates
+- Webhook processing for delivery events
+- Suppression lists and list hygiene automation
+
+## Structure
+
+```
+email-best-practices/
+├── SKILL.md                    # Start here - routes to the right resource
+└── resources/
+    ├── deliverability.md       # SPF/DKIM/DMARC, sender reputation
+    ├── transactional-emails.md # Password resets, OTPs, confirmations
+    ├── transactional-email-catalog.md # Email combinations by app type
+    ├── marketing-emails.md     # Newsletters, campaigns, consent
+    ├── email-capture.md        # Validation, verification, opt-in
+    ├── compliance.md           # CAN-SPAM, GDPR, CASL
+    ├── email-types.md          # Transactional vs marketing
+    ├── sending-reliability.md  # Idempotency, retry logic, errors
+    ├── webhooks-events.md      # Delivery events, webhook setup
+    └── list-management.md      # Suppression lists, hygiene
+```
 
 ## Quick Start
 
-The main entry point is `SKILL.md`. It provides an overview and routes to detailed guidance:
-
-- **deliverability.md** - Authentication (SPF/DKIM/DMARC), sender reputation, bounce handling
-- **email-types.md** - Transactional vs marketing distinctions
-- **transactional-emails.md** - Password resets, OTPs, order confirmations
-- **marketing-emails.md** - Newsletters, campaigns, opt-in requirements
-- **compliance.md** - CAN-SPAM, GDPR, CASL requirements
-- **email-capture.md** - Validation, verification, double opt-in
-- **transactional-email-catalog.md** - Email combinations by app type
-
-## Installation
-
-Copy this directory to your agent's skills folder. See `SKILL.md` for usage.
+Open `SKILL.md` - it has a routing table that directs you to the right resource based on what you need to do.
 
 ## License
 
