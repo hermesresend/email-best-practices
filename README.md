@@ -14,6 +14,12 @@
 
 A comprehensive agent skill for building production-ready email systems. Covers everything from DNS authentication to webhook processing, with a focus on deliverability, compliance, and reliability.
 
+## Installation
+
+```bash
+npx skills add resend/email-best-practices
+```
+
 ## What This Skill Covers
 
 **Getting Started**
