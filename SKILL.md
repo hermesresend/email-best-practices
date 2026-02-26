@@ -43,6 +43,8 @@ Guidance for building deliverable, compliant, user-friendly emails.
 | Handle retries, idempotency, errors | [Sending Reliability](./resources/sending-reliability.md) |
 | Process delivery events, set up webhooks | [Webhooks & Events](./resources/webhooks-events.md) |
 | Manage bounces, complaints, suppression | [List Management](./resources/list-management.md) |
+| Set up domains, DNS, DMARC, BIMI | `domain-setup` skill in `resend/resend-skills` |
+| Debug API errors, delivery issues | `error-troubleshooting` skill in `resend/resend-skills` |
 
 ## Start Here
 
@@ -50,7 +52,7 @@ Guidance for building deliverable, compliant, user-friendly emails.
 Start with the [Catalog](./resources/transactional-email-catalog.md) to plan which emails your app needs (password reset, verification, etc.), then set up [Deliverability](./resources/deliverability.md) (DNS authentication) before sending your first email.
 
 **Spam issues?**
-Check [Deliverability](./resources/deliverability.md) first—authentication problems are the most common cause. Gmail/Yahoo reject unauthenticated emails.
+Check [Deliverability](./resources/deliverability.md) first—authentication problems are the most common cause. Gmail/Yahoo reject unauthenticated emails. For Resend-specific deliverability insights, suppressions, and "delivered but not received" troubleshooting, see the Resend section in that guide.
 
 **Marketing emails?**
 Follow this path: [Email Capture](./resources/email-capture.md) (collect consent) → [Compliance](./resources/compliance.md) (legal requirements) → [Marketing Emails](./resources/marketing-emails.md) (best practices).

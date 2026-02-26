@@ -115,7 +115,46 @@ Learn more: https://resend.com/docs/knowledge-base/warming-up
 - [mail-tester.com](https://www.mail-tester.com) - Send a test email, get deliverability score
 - [MXToolbox](https://mxtoolbox.com/blacklists.aspx) - Check blacklist status
 
+## Resend Deliverability Insights
+
+Resend provides built-in deliverability checks on every sent email. In the dashboard, click an email → "Insights" to see pass/fail checks:
+
+- **Link URLs match sending domain** — mismatched URLs trigger spam filters
+- **DMARC record is valid** — required by Gmail and Yahoo since 2024
+- **Unsubscribe header present** — required for bulk senders
+- **Text version included** — improves deliverability over HTML-only
+- **Email size** — keep under 100KB for best results
+
+### Resend Suppressions
+
+When you send to a recipient that previously hard-bounced or marked your email as spam, Resend proactively blocks the delivery (suppression).
+
+- Suppression list is **per region** — a bounce on any domain in your region suppresses the address across all domains in that region
+- Gmail/Google Workspace doesn't return complaint events
+- You can view and remove addresses from the suppression list in the dashboard
+
+### "Delivered but Not Received"
+
+If Resend shows `delivered` but the recipient doesn't see the email:
+
+1. **Check spam/junk folder** — most common cause
+2. **Check suppression list** — may be suppressed from a previous bounce
+3. **Verify recipient address** — typos are surprisingly common
+4. **Check email client filters/rules** — auto-archiving or deleting
+5. **Apple Private Relay** — Apple hides real addresses; the relay address must be valid
+6. **Check Resend dashboard** for detailed status info
+
+### Domain Setup
+
+For domain verification (SPF/DKIM/MX), DMARC progressive rollout, and BIMI setup, use the `domain-setup` skill from `resend/resend-skills`.
+
+### Error Troubleshooting
+
+For API errors (403, 422, 429, 500), CORS issues, and delivery debugging, use the `error-troubleshooting` skill from `resend/resend-skills`.
+
 ## Related
 
 - [List Management](./list-management.md) - Handle bounces and complaints to protect reputation
 - [Sending Reliability](./sending-reliability.md) - Retry logic and error handling
+- [Resend Domain Setup](https://resend.com/docs/dashboard/domains/introduction) - Domain verification docs
+- [Resend Deliverability Insights](https://resend.com/docs/dashboard/emails/deliverability-insights) - Dashboard feature docs
