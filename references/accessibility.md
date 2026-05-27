@@ -1,20 +1,12 @@
 # Email Accessibility
 
-Making emails readable for everyone — assistive tech, dark-mode clients, translation tools, AI agents, and people with low vision.
+Emails must be readable by screen readers, dark-mode clients, translation tools, and AI agents — not just sighted readers on a default inbox. The rules below are mechanical. Apply them every time.
 
-The Email Markup Consortium's [2026 accessibility report](https://emailmarkup.org/en/reports/accessibility/2026/) analyzed 376,348 emails. Only 8 passed every check (0.002%). Most failures are mechanical and easy to fix.
+## Rules
 
-## Why it matters
+### Set `lang` and `dir` on `<body>`
 
-- **Assistive tech.** Screen readers, braille displays, magnifiers, RTL languages. Structure is navigation, not decoration.
-- **Every reader.** Phone in sunlight, client-forced dark mode, translated content.
-- **Agents and AI.** Modern clients summarize and extract content. Accessible email is machine-readable email.
-
-## The six fixes
-
-### 1. Set `lang` and `dir` on `<body>`
-
-Missing on **~96%** of emails. Without them, screen readers guess pronunciation and translators stumble.
+Always include both. Without them, screen readers guess pronunciation and translators misfire.
 
 ```html
 <body lang="en" dir="ltr">
@@ -22,12 +14,14 @@ Missing on **~96%** of emails. Without them, screen readers guess pronunciation 
 </body>
 ```
 
-- `lang`: [BCP 47 language tag](https://developer.mozilla.org/en-US/docs/Glossary/BCP_47_language_tag) (`en`, `pt-BR`, `ja`)
+- `lang`: a [BCP 47 language tag](https://developer.mozilla.org/en-US/docs/Glossary/BCP_47_language_tag) (`en`, `pt-BR`, `ja`, `ar`)
 - `dir`: `ltr`, `rtl`, or `auto` as a last resort
 
-### 2. Mark layout tables as presentational
+For multi-locale templates, pass the locale through — do not hardcode `en`.
 
-**84%** of emails get this wrong. Without `role="presentation"`, screen readers announce "table, row 1 of 6" for every layout row.
+### Mark layout tables as presentational
+
+Any `<table>` used for layout must have `role="presentation"`. Otherwise screen readers announce "table, row 1 of N" for every layout row and the email becomes unusable.
 
 ```html
 <table role="presentation" cellpadding="0" cellspacing="0" border="0">
@@ -37,11 +31,11 @@ Missing on **~96%** of emails. Without them, screen readers guess pronunciation 
 </table>
 ```
 
-Only use a plain `<table>` when the data is actually tabular (orders, line items, etc.) — those should be left as real tables with proper headers.
+Only leave a `<table>` without `role="presentation"` when the data is genuinely tabular (line items, comparison rows). Tabular data should also use `<th scope="col">` for column headers.
 
-### 3. Use a semantic heading outline
+### Use a single `<h1>` and nest headings in order
 
-**74%** of emails have no `<h1>`. Headings give screen readers, agents, and clients a map of your content.
+Every email has exactly one `<h1>` that names the email. Subheadings nest in order — `<h1>` → `<h2>` → `<h3>`. Never skip levels. Never fake a heading with bold `<p>`.
 
 ```html
 <h1>Order confirmation</h1>
@@ -51,79 +45,83 @@ Only use a plain `<table>` when the data is actually tabular (orders, line items
     <h3>Tracking</h3>
 ```
 
-- One `<h1>` per email
-- Nest in order — never skip levels (no `<h1>` → `<h3>`)
-- Don't fake headings with bold `<p>` tags
+Headings are how assistive tech and AI clients navigate and summarize the email. They are not a styling choice.
 
-### 4. Write descriptive link and alt text
+### Write descriptive link text
 
-**Links** should describe their destination.
+Link text must describe the destination. Never use "click here," "learn more," "read more," or bare URLs.
 
 ```html
-<!-- Bad -->
+<!-- Wrong -->
 <a href="...">click here</a>
+<a href="...">https://resend.com/blog/...</a>
 
-<!-- Good -->
-<a href="...">read the full report</a>
+<!-- Right -->
+<a href="...">Read the 2026 accessibility report</a>
 ```
 
-**Images** need alt text that conveys purpose and important details.
+### Write meaningful alt text — and use `alt=""` for decorative images
+
+Two distinct rules, both mandatory.
+
+**Meaningful images** (product shots, charts, screenshots, anything carrying information): describe the purpose and key details in context.
 
 ```html
-<!-- Bad -->
-<img src="..." alt="photo">
-<img src="..." alt="image of a bike">
+<!-- Wrong: redundant, vague -->
+<img src="..." alt="image">
+<img src="..." alt="photo of a bike">
 
-<!-- Good -->
-<img src="..." alt="A red bicycle leaning against a brick wall on a rainy street">
+<!-- Right: purpose + key details -->
+<img src="..." alt="Red bicycle leaning against a brick wall on a rainy street">
 ```
 
-**Decorative images** (spacers, divider lines, background flourishes) should use an empty `alt=""` so screen readers skip them cleanly. Never omit the attribute entirely.
+**Decorative images** (spacers, dividers, background flourishes, pure branding ornaments): use an empty `alt=""`. This tells screen readers to skip them cleanly. Never omit the `alt` attribute entirely.
 
 ```html
 <img src="divider.png" alt="" role="presentation">
 ```
 
-### 5. Include a `<title>` tag
+If an image conveys no information that isn't already in the surrounding text, it is decorative.
 
-Missing on **45%** of emails. Many clients and assistive technologies read it first.
+### Include a `<title>` tag
+
+Many clients and assistive technologies read `<title>` before anything else. Treat it like the subject line, not the brand name.
 
 ```html
 <head>
-  <title>Weekly product updates from Resend</title>
+  <title>Your weekly product updates from Resend</title>
 </head>
 ```
 
-Describe the specific email content — treat it like the subject line, not the brand.
+### Hit 4.5:1 color contrast, then check dark mode
 
-### 6. Hit 4.5:1 color contrast
+- Body text and links: **4.5:1** minimum against the background (WCAG AA)
+- Large text (≥18pt, or ≥14pt bold): **3:1** minimum
+- Never rely on color alone to convey meaning (error states, status badges) — pair it with text or an icon
 
-Over half of emails fail WCAG AA contrast. Use the [WebAIM Contrast Checker](https://webaim.org/resources/contrastchecker/).
+Verify with the [WebAIM Contrast Checker](https://webaim.org/resources/contrastchecker/) or browser devtools.
 
-- Body text and links: **4.5:1** minimum
-- Large text (≥18pt or ≥14pt bold): **3:1** minimum
-- Don't rely on color alone to convey meaning (errors, status badges)
+**Dark mode.** Outlook, Apple Mail, and others force dark mode and derive dark colors from your light ones. Healthy starting contrast keeps the auto-inverted version readable. Always preview in dark mode before shipping.
 
-**Dark mode.** Some clients (Outlook, Apple Mail) force dark mode and derive dark colors from your light ones. Healthy starting contrast makes the auto-inverted version more likely to stay accessible. Preview in dark mode before shipping.
+## Authoring checklist
 
-## Content checklist
+Run this on every template:
 
-Defaults handle structure, but content choices are on you:
-
-- [ ] One `<h1>` that names the email, then nested headings in order
-- [ ] Every meaningful image has descriptive `alt`; decorative images have `alt=""`
-- [ ] Every link says where it goes — no "click here", "learn more", or bare URLs
-- [ ] Body text passes 4.5:1 contrast; preview in dark mode
-- [ ] `<title>` set on `<head>`, specific to the email
-- [ ] `lang` and `dir` set on `<body>` to match the content
-- [ ] Plain text alternative provided alongside the HTML version
+- [ ] Exactly one `<h1>`, with `<h2>`/`<h3>` nested in order — no skipped levels
+- [ ] Every meaningful image has descriptive `alt`; every decorative image has `alt=""`
+- [ ] Every link describes its destination — no "click here," "learn more," or bare URLs
+- [ ] Body text passes 4.5:1 contrast and stays readable in dark mode
+- [ ] `<title>` set on `<head>`, specific to this email (not the brand name)
+- [ ] `<body>` has both `lang` and `dir` set to the email's actual locale
+- [ ] Layout `<table>` elements have `role="presentation"`
+- [ ] Plain-text alternative is sent alongside the HTML version
 
 ## Testing
 
-- **Screen reader pass.** macOS VoiceOver (`Cmd+F5`) or NVDA on Windows. Listen to your email read top to bottom.
-- **Contrast.** [WebAIM Contrast Checker](https://webaim.org/resources/contrastchecker/) or browser devtools.
-- **Dark mode.** Send a test to Outlook (Windows/web), Apple Mail with dark appearance, Gmail iOS/Android.
-- **HTML validation.** [emailmarkup.org/checker](https://emailmarkup.org/en/checker/) flags many of these issues automatically.
+- **Screen reader pass.** macOS VoiceOver (`Cmd+F5`) or NVDA on Windows. Listen top to bottom; if anything is confusing, fix the markup.
+- **Contrast.** [WebAIM Contrast Checker](https://webaim.org/resources/contrastchecker/).
+- **Dark mode.** Send a test to Outlook (Windows/web), Apple Mail with dark appearance, Gmail iOS and Android.
+- **Automated checks.** [emailmarkup.org/checker](https://emailmarkup.org/en/checker/) flags most of the above.
 
 ## Related
 
@@ -133,4 +131,4 @@ Defaults handle structure, but content choices are on you:
 
 ## Tooling
 
-If you're building templates with React Email, the latest version ships accessibility defaults (`<Html>` sets `lang`/`dir`, `<Img>` defaults `alt=""`, `<Markdown>` tables use `role="presentation"`, `<Preview>` emits a `<title>`). Upgrade with `npm install react-email@latest` and the structural fixes happen for free — content choices (headings, alt text, link copy, contrast) are still yours.
+When generating templates with React Email, the latest version handles several of the structural rules: `<Html>` sets `lang`/`dir`, `<Img>` defaults to `alt=""`, `<Markdown>` tables render `role="presentation"`, and `<Preview>` emits a `<title>`. Upgrade with `npm install react-email@latest`. The content rules — heading hierarchy, descriptive alt and link text, contrast — still have to be applied by hand.
