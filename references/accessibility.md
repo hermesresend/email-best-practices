@@ -2,8 +2,6 @@
 
 Emails must be readable by screen readers, dark-mode clients, translation tools, and AI agents — not just sighted readers on a default inbox. The rules below are mechanical. Apply them every time.
 
-This reference is calibrated to the [Email Markup Consortium's 2026 Accessibility Report](https://emailmarkup.org/en/reports/accessibility/2026/), which audited 376,348 production emails using [Parcel's accessibility checker](https://parcel.io/docs/dev-tools/accessibility-checker). The rules below are the top issues found, with severity labels (Critical, Serious, Mild) drawn from the [Deque Axe impact model](https://docs.deque.com/auditor/2.30/en/impact_levels). Severity drives priority — fix Critical and Serious issues first.
-
 ## Rules
 
 ### Set `lang` and `dir` on `<html>` and on `<body>`'s direct children (Serious)
@@ -31,7 +29,7 @@ Both attributes are needed in **two places**: on `<html>` *and* on the direct ch
 - `dir="auto"` — lets the user agent infer direction from content
 - `lang="und"` — marks the language as undetermined
 
-Both fallbacks are worse than the correct value but much better than nothing. For multi-locale templates, pass the locale through — do not hardcode `en`.
+Both fallbacks are worse than the correct value but much better than nothing. For multi-locale templates, pass the locale through; do not hardcode `en`.
 
 ### Mark layout tables as presentational (Serious)
 
@@ -49,7 +47,7 @@ Leave a `<table>` without `role="presentation"` only when the data is genuinely 
 
 ### Use a single `<h1>` and nest headings in order (Mild)
 
-Most emails should have one `<h1>` that names the email, with subheadings nested in order — `<h1>` → `<h2>` → `<h3>`. Never skip levels. Never fake a heading with bold `<p>`.
+Most emails should have one `<h1>` that names the email, with subheadings nested in order:`<h1>` → `<h2>` → `<h3>`. Never skip levels. Never fake a heading with bold `<p>`.
 
 ```html
 <h1>Order confirmation</h1>
@@ -65,7 +63,7 @@ Headings are how assistive tech and AI clients navigate and summarize the email.
 
 ### Every link must have discernible text (Serious)
 
-Every `<a>` must contain text content that a screen reader can announce. The most common failure is a linked image with no alt text — the screen reader has nothing to say.
+Every `<a>` must contain text content that a screen reader can announce. The most common failure is a linked image with no alt text.
 
 A **linked image is never decorative.** It's functional, so its `alt` must describe what clicking does, not just what the image looks like.
 
@@ -87,11 +85,11 @@ A **linked image is never decorative.** It's functional, so its `alt` must descr
 </a>
 ```
 
-When the visible link text can't carry enough information, add visually hidden text inside the `<a>` (see [goodemailcode.com/email-accessibility/visually-hidden-text](https://www.goodemailcode.com/email-accessibility/visually-hidden-text)). `aria-label` and `title` on `<a>` have limited support in email clients — prefer real text content or visually hidden text.
+When the visible link text can't carry enough information, add visually hidden text inside the `<a>` (see [goodemailcode.com/email-accessibility/visually-hidden-text](https://www.goodemailcode.com/email-accessibility/visually-hidden-text)). `aria-label` and `title` on `<a>` have limited support in email clients. Prefer real text content or visually hidden text.
 
 ### Link text must describe the destination (Moderate)
 
-Even when a link has text, it must describe where the link goes. Never use "click here," "learn more," "read more," or bare URLs — screen reader users often navigate by jumping between link texts with no surrounding context.
+Even when a link has text, it must describe where the link goes. Never use "click here," "learn more," "read more," or bare URLs. Screen reader users often navigate by jumping between link texts with no surrounding context.
 
 ```html
 <!-- Wrong -->
